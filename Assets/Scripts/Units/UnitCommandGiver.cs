@@ -25,7 +25,32 @@ public class UnitCommandGiver : MonoBehaviour
 
         if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask)) { return; }
 
+        // check if we should attack or move
+        if(hit.collider.TryGetComponent<Targetable>(out Targetable target))
+        {
+            if (target.isOwned)
+            {
+                // If we hit something that is targetable but dow't own it we'lll try set target. 
+                TryMove(hit.point);
+                return;
+            }
+            // If we do click on a targetable thing and own it we want to try moving so we dont attack our own units
+            TryTarget(target);
+            return;
+        }
+        // if we don't click on  a targetable thing we want to try moving
         TryMove(hit.point);
+       
+    }
+
+    private void TryTarget(Targetable target)
+    {
+     
+        foreach (Unit unit in unitSelectionHandler.selectedUnits)
+        {
+            // we want to get the unit movement from the unit
+            unit.GetTargeter().CmdSetTarget(target.gameObject);
+        }
     }
 
     private void TryMove(Vector3 point)

@@ -10,6 +10,10 @@ public class RTSPlayer : NetworkBehaviour
 
     #region Server
 
+    public List<Unit> getMyUnits()
+    {
+        return myUnits;
+    }
     public override void OnStartServer()
     {
         //subscription to events 
