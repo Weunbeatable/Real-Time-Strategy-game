@@ -7,6 +7,7 @@ using UnityEngine.Events;
 
 public class Unit : NetworkBehaviour
 {
+    [SerializeField] private Health health = null;
     [SerializeField] private UnitMovement unitMovement = null;
     [SerializeField] private Targeter targeter = null;
     [SerializeField] private UnityEvent onSelected = null;
@@ -29,18 +30,25 @@ public class Unit : NetworkBehaviour
     }
 
     #region Server
+    [Server]
 
     // called on server when units spawned
     public override void OnStartServer()
     {
         //raising event of unit spawning (only on server)
         ServerOnUnitSpawned?.Invoke(this);
+        health.ServerOnDie += ServerHandleOnDie;
     }
 
     //called on server when units despwned
     public override void OnStopServer()
     {
         ServerOnUnitDeSpawned?.Invoke(this);
+        health.ServerOnDie -= ServerHandleOnDie;
+    }
+    private void ServerHandleOnDie()
+    {
+        NetworkServer.Destroy(gameObject);
     }
     /// <summary>
     /// We want client to store a list of its own units so clients
@@ -52,10 +60,9 @@ public class Unit : NetworkBehaviour
     #endregion
     #region Client 
 
-    public override void OnStartClient()
+    public override void OnStartAuthority()
     {
         // if we're server or don't have authority return
-        if (!isClientOnly || !isOwned) { return; }
         AuthorityOnUnitSpawned?.Invoke(this);
     }
 

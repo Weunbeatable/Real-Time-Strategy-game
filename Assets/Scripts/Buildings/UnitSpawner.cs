@@ -6,12 +6,32 @@ using UnityEngine.EventSystems;
 
 public class UnitSpawner : NetworkBehaviour ,IPointerClickHandler
 {
+    //When a base dies we want reference to it and trigger some action
+    [SerializeField] private Health health = null;
     [SerializeField] private GameObject unitPrefab = null;
     [SerializeField] private Transform unitSpawnLocation;
 
-    
+
 
     #region Server
+
+    //When object is alive
+    public override void OnStartServer()
+    {
+        health.ServerOnDie += ServerHandleOnDie;
+    }
+
+    //When object is !alive handle what happens when we die on server
+    public override void OnStopServer()
+    {
+        health.ServerOnDie -= ServerHandleOnDie;
+    }
+
+    [Server]
+    private void ServerHandleOnDie()
+    {
+        NetworkServer.Destroy(gameObject);
+    }
 
     [Command]
     private void CmdSpawnUnit()

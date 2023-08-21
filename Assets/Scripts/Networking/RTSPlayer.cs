@@ -45,9 +45,10 @@ public class RTSPlayer : NetworkBehaviour
 
     #region Client
 
-    public override void OnStartClient()
+    public override void OnStartAuthority()
     {
-        if (!isClientOnly) { return; }
+        //Check if machine is running as a server
+        if (NetworkServer.active || !isOwned) { return; }
         Unit.AuthorityOnUnitSpawned += AuthorityHandleUnitsSpawned;
         Unit.AuthorityOnUnitDeSpawned += AuthorityHandleUnitsDeSpawned;
     }
@@ -59,12 +60,10 @@ public class RTSPlayer : NetworkBehaviour
     }
     private void AuthorityHandleUnitsSpawned(Unit unit)
     {
-        if (!isOwned) { return; }
         myUnits.Add(unit); // don't need if check because we can't even see it anyways
     }
     private void AuthorityHandleUnitsDeSpawned(Unit unit)
     {
-        if (!isOwned) { return; }
         myUnits.Remove(unit);
     }
     #endregion
