@@ -21,8 +21,25 @@ public class Health : NetworkBehaviour
         base.OnStartServer();
 
         currentHealth = maxHealth;
+
+        UnitBase.ServerOnPlayerDie += ServerHandleGameOver;
         //dealing ddamage is server based and client should update UI
     }
+
+    public override void OnStopServer()
+    {
+
+        UnitBase.ServerOnPlayerDie += ServerHandleGameOver;
+    }
+    [Server]
+    public void ServerHandleGameOver(int ConnectionId)
+    {
+        // if the id of person who died matches the one who passed in its not the player who died so return
+        if (connectionToClient.connectionId != ConnectionId) { return; }
+        // if it is take damage, everything will die if base dies.
+        DealDamage(currentHealth);
+    }
+
     [Server]
     //Will take damage, listen for current health, if above 0 you're fine if 0 you die, if less than 0
     // set to 0 then die, upon death trigget an event so listenrs can then play their respective response.
@@ -50,4 +67,5 @@ public class Health : NetworkBehaviour
     }
 
     #endregion
+
 }

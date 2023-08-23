@@ -13,6 +13,13 @@ public class UnitCommandGiver : MonoBehaviour
     private void Start()
     {
         mainCamera = Camera.main;
+
+        GameOverHandler.ClientOnGameOver += ClientHandleGameOver;
+    }
+
+    private void OnDestroy()
+    {
+        GameOverHandler.ClientOnGameOver -= ClientHandleGameOver;
     }
 
     private void Update()
@@ -61,5 +68,11 @@ public class UnitCommandGiver : MonoBehaviour
             // we want to get the unit movement from the unit
             unit.GetUnitMovements().CmdMove(point);
         }
+    }
+
+    private void ClientHandleGameOver(string winnerName)
+    {
+        //stop doing raycast and checks.
+        enabled = false;
     }
 }

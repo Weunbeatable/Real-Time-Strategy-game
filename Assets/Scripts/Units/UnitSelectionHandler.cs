@@ -28,11 +28,13 @@ public class UnitSelectionHandler : MonoBehaviour
         mainCamera = Camera.main;
 
         Unit.AuthorityOnUnitDeSpawned += AuthorityHandleUnitDespawned;
+        GameOverHandler.ClientOnGameOver += ClientHandleGameOver;
     }
 
     private void OnDestroy()
     {
         Unit.AuthorityOnUnitDeSpawned -= AuthorityHandleUnitDespawned;
+        GameOverHandler.ClientOnGameOver -= ClientHandleGameOver;
     }
 
     private void Update()
@@ -142,5 +144,11 @@ public class UnitSelectionHandler : MonoBehaviour
         //if a unit is destroyed we want to remove it from the list to prevent having a null unit
         // which would cause errors. 
         selectedUnits.Remove(unit);
+    }
+
+    private void ClientHandleGameOver(string winnerName)
+    {
+        // when game is over we stop running update loop.
+        enabled = false;
     }
 }

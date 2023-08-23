@@ -6,11 +6,24 @@ public class UnitMovement : NetworkBehaviour
 {
     [SerializeField] private NavMeshAgent agent = null;
     [SerializeField] private Targeter targeter = null;
-    [SerializeField] private float chaseRange = 10f;   
+    [SerializeField] private float chaseRange = 10f;
 
 
 
     #region Server
+
+
+    public override void OnStartServer()
+    {
+        // when subscribing to the serveronGameover action we call our custom handlegame over
+        GameOverHandler.ServerOnGameOver += HandleGameOver;
+    }
+
+    public override void OnStopServer()
+    {
+        // when subscribing to the serveronGameover action we call to stop our custom handlegame over
+        GameOverHandler.ServerOnGameOver -= HandleGameOver;
+    }
 
     [ServerCallback] // makes calls on client but wont give us warnings in console. 
     private void Update()
@@ -48,6 +61,13 @@ public class UnitMovement : NetworkBehaviour
 
         agent.SetDestination(hit.position);
     }
+
+    [Server]
+    private void HandleGameOver()
+    {
+        agent.ResetPath();
+    }
+
     #endregion
 
 }

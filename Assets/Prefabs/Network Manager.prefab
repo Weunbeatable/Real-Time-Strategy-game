@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5335614835928035175
 MonoBehaviour:
@@ -51,8 +51,8 @@ MonoBehaviour:
   autoStartServerBuild: 1
   autoConnectClientBuild: 0
   sendRate: 60
-  offlineScene: 
-  onlineScene: 
+  offlineScene: Assets/Scenes/Scene_Menu.unity
+  onlineScene: Assets/Scenes/Scene_Map_01.unity
   transport: {fileID: 0}
   networkAddress: localhost
   maxConnections: 100
@@ -67,6 +67,7 @@ MonoBehaviour:
   - {fileID: 1559778355983589473, guid: 968dde9bd3c1a8540a6f1b3c09e7ceb2, type: 3}
   - {fileID: 432936847961214348, guid: d5f435762b9bacb4e979739b85389bdd, type: 3}
   - {fileID: 6174641733790438758, guid: 8c5aa72947b35c24091a3a97054dad07, type: 3}
+  - {fileID: 1860764635468602850, guid: 9ab16aff5db717c408a16ec22670103e, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     bufferLimit: 32
@@ -81,6 +82,8 @@ MonoBehaviour:
   connectionQualityInterval: 3
   timeInterpolationGui: 0
   unitSpawnerPrefab: {fileID: 432936847961214348, guid: d5f435762b9bacb4e979739b85389bdd,
+    type: 3}
+  gameOverHandlerPrefab: {fileID: 1530017515476414874, guid: 9ab16aff5db717c408a16ec22670103e,
     type: 3}
 --- !u!114 &5335614835928035176
 MonoBehaviour:

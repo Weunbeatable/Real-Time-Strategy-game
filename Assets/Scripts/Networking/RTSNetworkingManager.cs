@@ -2,10 +2,13 @@ using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RTSNetworkingManager : NetworkManager
 {
     [SerializeField] private GameObject unitSpawnerPrefab = null;
+    //want to spawn in gameoverhandler whenever new scene is a map. ONLY for maps
+    [SerializeField] private GameOverHandler gameOverHandlerPrefab = null;
     // When a unit gets spawned in
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
@@ -21,5 +24,19 @@ public class RTSNetworkingManager : NetworkManager
         //the owner is the player where that function is above ^.
         //Clients will get spawned and ownership is given to the player. 
         NetworkServer.Spawn(unitSpawnerInstance, conn);
+    }
+
+    public override void OnServerSceneChanged(string sceneName)
+    {
+        // relevant for switching to maps
+        // need to grab path in file
+        if (SceneManager.GetActiveScene().name.StartsWith("Scene_Map"))
+        {
+            // game over handler 
+            GameOverHandler gameOverHandlerInstance = Instantiate(gameOverHandlerPrefab);
+
+            //network server spawning as an object
+            NetworkServer.Spawn(gameOverHandlerInstance.gameObject);
+        }
     }
 }
