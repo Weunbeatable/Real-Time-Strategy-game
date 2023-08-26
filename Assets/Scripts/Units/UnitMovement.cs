@@ -53,6 +53,14 @@ public class UnitMovement : NetworkBehaviour
     [Command]
     public void CmdMove(Vector3 position)
     {
+        // server runs this code 
+        ServerMove(position);
+    }
+
+    [Server]
+    public void ServerMove(Vector3 position) // we can call movement on client and server
+    {
+        // as a client it says command move 
         targeter.ClearTarget();
 
         //Note !NavMesh instead of NavMesh, wanted to check if not clicking not if clicking

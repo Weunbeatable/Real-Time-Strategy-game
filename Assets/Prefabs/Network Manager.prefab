@@ -65,7 +65,7 @@ MonoBehaviour:
   playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 1559778355983589473, guid: 968dde9bd3c1a8540a6f1b3c09e7ceb2, type: 3}
-  - {fileID: 432936847961214348, guid: d5f435762b9bacb4e979739b85389bdd, type: 3}
+  - {fileID: 5568823484385453844, guid: 2dbdc798d81eba54680dc7f4b9b28437, type: 3}
   - {fileID: 6174641733790438758, guid: 8c5aa72947b35c24091a3a97054dad07, type: 3}
   - {fileID: 1860764635468602850, guid: 9ab16aff5db717c408a16ec22670103e, type: 3}
   snapshotSettings:
@@ -81,7 +81,7 @@ MonoBehaviour:
     deliveryTimeEmaDuration: 2
   connectionQualityInterval: 3
   timeInterpolationGui: 0
-  unitSpawnerPrefab: {fileID: 432936847961214348, guid: d5f435762b9bacb4e979739b85389bdd,
+  unitSpawnerPrefab: {fileID: 5568823484385453844, guid: 2dbdc798d81eba54680dc7f4b9b28437,
     type: 3}
   gameOverHandlerPrefab: {fileID: 1530017515476414874, guid: 9ab16aff5db717c408a16ec22670103e,
     type: 3}
