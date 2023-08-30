@@ -6,8 +6,11 @@ using UnityEngine;
 
 public class RTSPlayer : NetworkBehaviour
 {
+    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private LayerMask buildingBlockLayer = new LayerMask();
     // we dont need a list as our building array wont chagne in size when game starts
     [SerializeField] private Building[] buildings = new Building[0];
+    [SerializeField] private float buildingRangeLimit = 5f;
     public event Action<int> ClientOnResourcesUpdated; // 
 
     //Place to store our resources
@@ -15,12 +18,14 @@ public class RTSPlayer : NetworkBehaviour
     [SyncVar(hook = nameof(ClientHandleResourcesUpdated))]
     private int resources = 500;
 
+    //Team Colors
+    private Color teamColor = new Color();
     //list of our units
    [SerializeField] private List<Unit> myUnits = new List<Unit>();
     private List<Building> myBuildings = new List<Building>();
 
-    #region Server
-
+    public Transform GetCameraTransform() => cameraTransform;
+    public Color GetTeamColor() => teamColor;
     public int GetResources() => resources;
     public List<Unit> getMyUnits()
     {
@@ -31,6 +36,39 @@ public class RTSPlayer : NetworkBehaviour
     {
         return myBuildings;
     }
+
+    public bool CanPlaceBuilding(BoxCollider buildingCollider, Vector3 point)
+    {
+        if (Physics.CheckBox(point + buildingCollider.center,
+            buildingCollider.size / 2,
+            Quaternion.identity,
+            buildingBlockLayer))
+        {
+            return false; // because we are overlapping so we can't place it there
+        }
+
+     
+
+        foreach (Building building1 in buildings)
+        {
+            if ((point - building1.transform.position).sqrMagnitude
+                <= buildingRangeLimit * buildingRangeLimit)
+            {
+                return true;
+            }
+        }
+        return false;      
+    }
+
+    #region Server
+
+   [Server]
+   public void SetTeamColor(Color newteamColor)
+        {
+        teamColor = newteamColor;
+
+        }
+
 
     [Server]
     public void SetResources(int newResources)
@@ -57,6 +95,13 @@ public class RTSPlayer : NetworkBehaviour
 
     [Command]
     // Can't send over building but we can send its ID, and position
+    /*
+     * Method makes sure building exists, 
+     * checks to see player has enough money left
+     * Checks for overlap
+     * then makes sure in range of anther building
+     * allowing for spawning resources
+     */ 
     public void CmdTryPlaceBuilding(int buildingId, Vector3 position)
     {
         //We need to figure out which building using a list
@@ -74,12 +119,23 @@ public class RTSPlayer : NetworkBehaviour
         // In case we get an invalid ID just leave
         if(buildingToPlace == null) { return; }
 
+        //check resources for building
+        if(resources < buildingToPlace.GetPrice()) { return; }
+
+        // check if in range or overlapping
+        BoxCollider buildingCollider = buildingToPlace.GetComponent<BoxCollider>();
+
+
+
+        if (!CanPlaceBuilding(buildingCollider, position)) { return; }
+
         //now we can spawn on server
        GameObject buildingInstance  =  
             Instantiate(buildingToPlace.gameObject, position, buildingToPlace.transform.rotation);
 
         // spawn on network
         NetworkServer.Spawn(buildingInstance, connectionToClient);
+        SetResources(resources - buildingToPlace.GetPrice());
     }
 
     //Whoever host is will have list filled up. 

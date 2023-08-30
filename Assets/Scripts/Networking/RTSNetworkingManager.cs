@@ -14,6 +14,14 @@ public class RTSNetworkingManager : NetworkManager
     {
         base.OnServerAddPlayer(conn);
 
+        //add colors stored in player script
+        RTSPlayer player = conn.identity.GetComponent<RTSPlayer>();
+        player.SetTeamColor(new Color(
+            UnityEngine.Random.Range(0f, 1f),
+            UnityEngine.Random.Range(0f, 1f),
+            UnityEngine.Random.Range(0f, 1f)
+            ));
+
         //The prefab we want to spawn, its spawned and rotated where the player was spawned in. 
         GameObject unitSpawnerInstance = Instantiate(
             unitSpawnerPrefab, //want to spawn it in for everyone connected

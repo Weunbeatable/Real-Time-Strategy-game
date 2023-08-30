@@ -30,7 +30,7 @@ Transform:
   m_Children:
   - {fileID: 3797668618113797212}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6213703691690556033
 GameObject:
@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 3797668618113797212}
   - component: {fileID: 2421116700728361564}
   - component: {fileID: 5249997664688766839}
-  - component: {fileID: 629255699978688643}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -116,16 +115,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &629255699978688643
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6213703691690556033}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
